@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
-setInterval(fetchPrices, 600000);
+setInterval(fetchPrices, 600000 * 6 * 2); // 
 
 app.get('/stats/:coin', async (req, res) => {
     const coin = req.params.coin;
