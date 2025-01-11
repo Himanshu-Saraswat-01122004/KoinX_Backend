@@ -21,7 +21,6 @@ app.get('/stats/:coin', async (req, res) => {
     const data = await getCoinByName(coin);
     if(data) {
         res.send(data);
-        // console.log(data);
     }
     else {
         res.send("Coin not found");
@@ -32,7 +31,6 @@ app.get('/deviation/:coin', async (req, res) => {
     const coin = req.params.coin;
     try {
         const deviation = await getStanderdDeviation(coin);
-        // console.log(deviation); 
         res.send({ deviation });
     }
     catch (error) {
