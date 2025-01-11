@@ -1,6 +1,9 @@
 const http = require('http');
 const express = require('express');
 const { connectToDB } = require('./util/database');
+const fetchPrices = require('./jobs/fetchPrices');
+const { getStanderdDeviation } = require('./jobs/fetchPrices');
+const { getCoinByName } = require('./models/coins');
 require('dotenv').config();
 
 const app = express();
@@ -11,6 +14,31 @@ app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
+setInterval(fetchPrices, 600000);
+
+app.get('/stats/:coin', async (req, res) => {
+    const coin = req.params.coin;
+    const data = await getCoinByName(coin);
+    if(data) {
+        res.send(data);
+        // console.log(data);
+    }
+    else {
+        res.send("Coin not found");
+    }
+})
+
+app.get('/deviation/:coin', async (req, res) => {
+    const coin = req.params.coin;
+    try {
+        const deviation = await getStanderdDeviation(coin);
+        // console.log(deviation); 
+        res.send({ deviation });
+    }
+    catch (error) {
+        res.send(error.message);
+    }
+})
 
 const main = async () => {
     try {
